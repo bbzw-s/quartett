@@ -1,13 +1,17 @@
 
-.PHONY : build
-build:
+.PHONY : setup
+setup: clean
 	mkdir build
 	cd build &&\
-	cmake ..&&\
+	cmake ..
+
+.PHONY : build
+build:
+	cd build &&\
 	cmake --build .
 
 .PHONY : run
-run:
+run: build
 	./build/quartett
 
 
