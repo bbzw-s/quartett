@@ -1,9 +1,24 @@
-// ThinkPad Quartett
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
 
+/*
+ * Function Prototypes
+ */
+void eputs(char *);
+void nullcheck(void *, char *);
+thinkpad *create_thinkpad(char *, int, int, double);
+card *create_card(thinkpad *);
+cardstack *create_cardstack(thinkpad *);
+card *create_card(thinkpad *);
+void append_card(cardstack *, thinkpad *);
+cardstack *shuffle_cardstack();
+void generate_cards(void);
+bool run_game(void);
+
+/*
+ * Type Definitions
+ */
 typedef struct {
     char *model_name;
     int ram;            // RAM in GB
@@ -54,17 +69,6 @@ thinkpad *create_thinkpad(char *name, int ram, int storage, double cpu_clock) {
 
 /*
  * @author Kris Huber
- * @description helper function - should never interface directly
- */
-card *create_card(thinkpad *tp) {
-    card *c = malloc(sizeof(card));
-    c->thinkpad = tp;
-    c->next = NULL;
-    return c;
-}
-
-/*
- * @author Kris Huber
  * @description initialize a cardstack struct
  */
 cardstack *create_cardstack(thinkpad *tp) {
@@ -77,11 +81,37 @@ cardstack *create_cardstack(thinkpad *tp) {
 
 /*
  * @author Kris Huber
+ * @description helper function - should never interface directly
+ */
+card *create_card(thinkpad *tp) {
+    card *c = malloc(sizeof(card));
+    c->thinkpad = tp;
+    c->next = NULL;
+    return c;
+}
+
+/*
+ * @author Kris Huber
  * @description append a card to the cardstack instance
  */
 void append_card(cardstack *cs, thinkpad *tp) {
     cs->tail = cs->tail->next = create_card(tp);
     cs->size++;
+}
+
+/*
+ * @author Kris Huber
+ * @description shuffle all cards in cardstack
+ */
+void shuffle_cardstack(cardstack *cs) {
+    card *current = cs-> head;
+
+    // generate distinct set of random numbers in range of 1..cardstack->size
+
+    while(*current != NULL) {
+        
+        current = current->next;
+    }
 }
 
 /*
