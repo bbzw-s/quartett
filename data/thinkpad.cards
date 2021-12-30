@@ -1,0 +1,17 @@
+schema (
+    - name
+    - cpu
+    - keyboard
+)
+
+card (
+    - X230
+    - i7
+    - chiclet
+)
+
+card (
+    - X60
+    - Duo-Core
+    - classic
+)
