@@ -6,7 +6,6 @@
 #include "config.h"
 #include "tokens.h"
 #include "util.h"
-#include ""
 
 linked *parse() {
     char buffer[SCHEMA_BUF_SIZE];

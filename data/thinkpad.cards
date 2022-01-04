@@ -1,17 +1,20 @@
 schema (
-    - name
-    - cpu
-    - keyboard
+    - string name
+    - int disk
+    - float ram
+    - string keyboard
 )
 
 card (
     - X230
-    - i7
+    - 1000
+    - 12096
     - chiclet
 )
 
 card (
     - X60
-    - Duo-Core
+    - 500
+    - 32096
     - classic
 )
