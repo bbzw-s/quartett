@@ -180,9 +180,17 @@ void next_card(cardstack *cs) {
  * @description generate play cards
  */
 cardstack *generate_cards() {
-    cardstack *cs = create_cardstack(create_card(create_thinkpad("X220", 8, 256, 2.4)));
+    cardstack *cs = create_cardstack(create_card(create_thinkpad("X220", 8, 256, 3)));
+    append_card(cs, create_card(create_thinkpad("x230", 12, 320, 2.3)));
     append_card(cs, create_card(create_thinkpad("T420", 8, 512, 2.8)));
-    append_card(cs, create_card(create_thinkpad("X60",  8, 64,  1.8)));
+    append_card(cs, create_card(create_thinkpad("T60", 3, 80, 1.7)));
+    append_card(cs, create_card(create_thinkpad("X60",  7, 64,  1.8)));
+    append_card(cs, create_card(create_thinkpad("X61", 5, 100, 1.6)));
+    append_card(cs, create_card(create_thinkpad("701C", 6, 5, 0.05)));
+    append_card(cs, create_card(create_thinkpad("Z61e", 1, 40, 1.1)));
+    append_card(cs, create_card(create_thinkpad("235", 9, 14, 0.22)));
+    append_card(cs, create_card(create_thinkpad("A22m", 4, 6, 1.5)));
+    append_card(cs, create_card(create_thinkpad("R60i", 2, 18, 2.22)));
     return cs;
 }
 
