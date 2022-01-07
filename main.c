@@ -124,16 +124,35 @@ void next_card(cardstack *cs) {
  * @author Kris Huber
  * @description shuffle all cards in cardstack
  */
-// void shuffle_cardstack(cardstack *cs) {
-//     card *current = cs-> head;
+void shuffle_cardstack(cardstack *cs) {
+    srand(time(0));
+    card *csa[cs->size];
 
-//     // generate distinct set of random numbers in range of 1..cardstack->size
+    // load cardstack into card pointer array
+    size_t i = 0;
+    for(card *cur = cs->head; cur != NULL; cur = cur->next) {
+        csa[i] = cur;
+        i++;
+    }
 
-//     while(*current != NULL) {
-        
-//         current = current->next;
-//     }
-// }
+    // shuffle array
+    for (int t = cardstack->size - 1; t > 0; t--) {
+        // Pick a random index from 0 to i
+        int j = rand() % (t + 1);
+ 
+        // Swap csa with the element at random index
+        card temp = csa[t];
+        csa[t] = csa[j];
+        csa[j] = temp;
+    }
+
+    // rethread
+    for(int k = 0; k < cardstack->size - 2; k++) {
+        if(k == 0) cs->head = csa[k]:
+        csa[k]->next = csa[k + 1];
+    }
+    cs->tail = csa[cardstack->size - 1];
+}
 
 /*
  * @author Lian Studer
