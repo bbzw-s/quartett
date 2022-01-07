@@ -50,6 +50,8 @@ void show_game_manual(void);
 char select_menu_option(void);
 char select_card_parameter(void);
 int play_cards(thinkpad *, thinkpad *);
+void print_win();
+void print_loss();
 
 /*
  * @author Kris Huber
@@ -247,6 +249,24 @@ void print_cardstack_info(cardstack *player_stack, cardstack *computer_stack) {
 }
 
 /*
+ *  @author Kris Huber
+ */
+void print_win() {
+    puts("+-------------------+")
+    puts("| You Won The Game! |");
+    puts("+-------------------+")
+}
+
+/*
+ *  @author Kris Huber
+ */
+void print_loss() {
+    puts("+--------------------+")
+    puts("| You Lost The Game! |");
+    puts("+--------------------+")
+}
+
+/*
  * @author Lian Studer
  * @description compares the players cards based on the selected field, 
  *  returns 0 if the player won or 1 if the computer won
@@ -306,18 +326,22 @@ void run_game() {
             next_card(player_stack);
             next_card(computer_stack);
 
+            puts("You won this round!");
         } else if (result == 1) { // computer wins
             append_card(computer_stack, player_stack->head);
             remove_top_card(player_stack);
             next_card(computer_stack);
             next_card(player_stack);
+            puts("You lost this round!");
         }
 
         if (player_stack->size == 0) {
-            // player_loose();
+            player_loose();
+            print_win();
             return;
         } else if (computer_stack-> size == 0) {
-            // computer_loose();
+            computer_loose();
+            print_loss();
             return;
         }
     }
