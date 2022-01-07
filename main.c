@@ -35,7 +35,7 @@ cardstack *create_cardstack(thinkpad *);
 card *create_card(thinkpad *);
 void append_card(cardstack *, thinkpad *);
 void shuffle_cardstack(cardstack *);
-void generate_cards(void);
+cardstack *generate_cards(void);
 void run_game(void);
 void show_game_manual(void);
 char start_menu(void);
@@ -120,11 +120,12 @@ void append_card(cardstack *cs, thinkpad *tp) {
 /*
  * @author Lian Studer
  */
-// void generate_cards() {
-//     cardstack *cs = create_cardstack(create_card(create_thinkpad("X220", 8, 256, 2.4)));
-//     append_card(cs, create_card(create_thinkpad("T420", 8, 512, 2.8)));
-//     append_card(cs, create_card(create_thinkpad("X60",  8, 64,  1.8)));
-// }
+cardstack *generate_cards() {
+    cardstack *cs = create_cardstack(create_card(create_thinkpad("X220", 8, 256, 2.4)));
+    append_card(cs, create_card(create_thinkpad("T420", 8, 512, 2.8)));
+    append_card(cs, create_card(create_thinkpad("X60",  8, 64,  1.8)));
+    return cs;
+}
 
 /*
  * @author Lian Studer
