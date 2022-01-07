@@ -49,8 +49,7 @@ void run_game(void);
 void show_game_manual(void);
 char select_menu_option(void);
 char select_card_parameter(void);
-void play_cards(card *, card *);
-
+int play_cards(thinkpad *, thinkpad *);
 
 /*
  * @author Kris Huber
@@ -241,9 +240,40 @@ void print_cardstack_info(cardstack *player_stack, cardstack *computer_stack) {
 
 /*
  * @author Lian Studer
+ * @description compares the players cards based on the selected field, 
+ *  returns 0 if the player won or 1 if the computer won
  */
-void play_cards(card *player_top, card *computer_top) {
-
+int play_cards(thinkpad *player_thinkpad, thinkpad *computer_thinkpad) {
+    printf("\n \
+Select a parameter:\n \
+1> RAM in Gb\n \
+2> Storage in Gb\n \
+3> CPU Clock in Ghz\n \
+4> Quit\n\n");
+    char selected_option = select_menu_option();
+    switch (selected_option) {
+        case '1':
+            if (player_thinkpad->ram > computer_thinkpad->ram)
+                return 0;
+            else
+                return 1;
+            break;
+        case '2':
+            if (player_thinkpad->storage > computer_thinkpad->storage)
+                return 0;
+            else
+                return 1;
+            break;
+        case '3':
+            if (player_thinkpad->cpu_clock > computer_thinkpad->cpu_clock)
+                return 0;
+            else
+                return 1;
+            break;
+        case '4':
+            exit(0);
+            break;
+    }
 }
 
 /*
@@ -255,48 +285,30 @@ void run_game() {
     cardstack *player_stack = split_cardstack(computer_stack);
     
     while (1) {
-        
         thinkpad *computer_thinkpad = computer_stack->head->thinkpad;
         thinkpad *player_thinkpad = player_stack->head->thinkpad;
+        
         print_cardstack_info(player_stack, computer_stack);
         print_thinkpad(player_thinkpad);
         
-        printf("\n \
-Select a parameter:\n \
-1> RAM in Gb\n \
-2> Storage in Gb\n \
-3> CPU Clock in Ghz\n \
-4> Quit\n\n");
-
-        char selected_option = select_menu_option();
-        switch (selected_option) {
-            case '1':
-                if (player_thinkpad->ram > computer_thinkpad->ram) {
-                } else {
-                    
-                }
-                break;
-            case '2':
-                if (player_thinkpad->storage > computer_thinkpad->storage) {
-                } else {
-
-                }
-                break;
-            case '3':
-                if (player_thinkpad->cpu_clock > computer_thinkpad->cpu_clock) {
-                } else {
-
-                }
-                break;
-            case '4':
-                exit(0);
-                break;
+        int result = play_cards(player_thinkpad, computer_thinkpad);
+        if (result == 0) { // player wins
+            append_card(player_stack, computer_stack->head);
+            remove_top_card(computer_stack);
+            next_card(player_stack);
+        } else if (result == 1) { // computer wins
+            append_card(computer_stack, player_stack->head);
+            remove_top_card(player_stack);
+            next_card(computer_stack);
         }
-        
-        // Game and interaction logic      
-        // 1. Select a parameter
-        // 2. Keep the card if yours is better, move it to the back of the stack if the other one is better
-        // 3. Repeat until one of either stacks is empty
+
+        if (player_stack->size == 0) {
+            player_loose();
+            return;
+        } else if (computer_stack-> size == 0) {
+            computer_loose();
+            return;
+        }
     }
 }
 
