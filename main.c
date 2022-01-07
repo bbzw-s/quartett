@@ -324,23 +324,19 @@ void run_game() {
             append_card(player_stack, computer_stack->head);
             remove_top_card(computer_stack);
             next_card(player_stack);
-            next_card(computer_stack);
 
             puts("You won this round!");
         } else if (result == 1) { // computer wins
             append_card(computer_stack, player_stack->head);
             remove_top_card(player_stack);
             next_card(computer_stack);
-            next_card(player_stack);
             puts("You lost this round!");
         }
 
         if (player_stack->size == 0) {
-            player_loose();
             print_win();
             return;
         } else if (computer_stack-> size == 0) {
-            computer_loose();
             print_loss();
             return;
         }
