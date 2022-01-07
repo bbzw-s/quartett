@@ -27,20 +27,29 @@ typedef struct {
 /*
  * Function Prototypes
  */
+
+// Utility functions
 void eputs(char *);
 void nullcheck(void *, char *);
+void print_thinkpad(thinkpad *);
+
+// Linked list abstractions
 thinkpad *create_thinkpad(char *, int, int, double);
 card *create_card(thinkpad *);
 cardstack *create_cardstack(card *);
-card *create_card(thinkpad *);
 void append_card(cardstack *, card *);
 void shuffle_cardstack(cardstack *);
+cardstack *split_cardstack(cardstack *);
+void next_card(cardstack *);
+
+// Game logic
 cardstack *generate_cards(void);
 void run_game(void);
 void show_game_manual(void);
 char start_menu(void);
-cardstack *split_cardstack(cardstack *);
-void next_card(cardstack *);
+char select_card_parameter(void);
+void play_cards(card *, card *);
+
 
 /*
  * @author Kris Huber
@@ -62,6 +71,7 @@ void nullcheck(void *ptr, char *msg) {
 
 /*
  * @author Lian Studer
+ * @description initialize a thinkpad struct
  */
 thinkpad *create_thinkpad(char *name, int ram, int storage, double cpu_clock) {
     thinkpad *new_thinkpad = (thinkpad *)malloc(sizeof(thinkpad));
@@ -86,7 +96,7 @@ cardstack *create_cardstack(card *first_card) {
 
 /*
  * @author Kris Huber
- * @description helper function - should never interface directly
+ * @description initialize a card struct
  */
 card *create_card(thinkpad *tp) {
     card *c = malloc(sizeof(card));
@@ -105,6 +115,10 @@ void append_card(cardstack *cs, card *new_card) {
     cs->size++;
 }
 
+/*
+ * @author Lian Studer
+ * @description delete the top card from the stack
+ */
 void remove_top_card(cardstack *cardstack) {
     cardstack->head = cardstack->head->next;
     cardstack->tail->next = cardstack->head;
@@ -137,6 +151,7 @@ void next_card(cardstack *cs) {
 
 /*
  * @author Lian Studer
+ * @description generate play cards
  */
 cardstack *generate_cards() {
     cardstack *cs = create_cardstack(create_card(create_thinkpad("X220", 8, 256, 2.4)));
@@ -145,12 +160,12 @@ cardstack *generate_cards() {
     return cs;
 }
 
+/*
+ * @author Lian Studer
+ * @description split the whole stack into two stacks - one for each player
+ */
 cardstack *split_cardstack(cardstack *cs) {
-    int first_stack_size = (int)(cs->size / 2);
-    int sec_stack_size = (cs->size) - first_stack_size;
-
-    printf("Stack Size 1: %i\n", first_stack_size);
-    printf("Stack Size 2: %i\n", sec_stack_size);
+    int new_stack_size = (int)(cs->size / 2);
 
     cardstack *new_cardstack = create_cardstack(cs->head);
     nullcheck(new_cardstack, "The second cardstack");
@@ -158,8 +173,7 @@ cardstack *split_cardstack(cardstack *cs) {
     remove_top_card(cs);
     next_card(cs);
 
-
-    for (int i = 1; i < first_stack_size; i++) {
+    for (int i = 1; i < new_stack_size; i++) {
         append_card(new_cardstack, cs->head);
         remove_top_card(cs);
         next_card(cs);
@@ -171,19 +185,50 @@ cardstack *split_cardstack(cardstack *cs) {
 /*
  * @author Lian Studer
  */
+void print_thinkpad(thinkpad *thinkpad) {
+    printf("\n \
+╻━━━━━━━━━━━━━━━━━━━━━━╻\n \
+┃ Model: %s\t\t┃\n \
+┃ ┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅ ┃\n \
+┃       RAM: %iGb\t┃\n \
+┃   Storage: %iGb\t┃\n \
+┃ CPU Clock: %.2lfGhz\t┃\n \
+╹━━━━━━━━━━━━━━━━━━━━━━╹\n",
+    thinkpad->model_name,
+    thinkpad->ram,
+    thinkpad->storage,
+    thinkpad->cpu_clock);
+}
+
+/*
+ * @author Lian Studer
+ */
+void play_cards(card *player_top, card *computer_top) {
+
+}
+
+/*
+ * @author Lian Studer
+ */
 void run_game() {
     printf("\n\n--- Starting the game ---\n\n");
 
-    cardstack *initial_cardstack = generate_cards();
-    printf("Cardstack Size: %i\n", initial_cardstack->size);
-    // shuffle_cardstack(initial_cardstack);
-    cardstack *second_cardstack = split_cardstack(initial_cardstack);
-    printf("Cardstack Size 1: %i\n", initial_cardstack->size);
-    printf("Cardstack Size 2: %i\n", second_cardstack->size);
+    cardstack *computer_stack = generate_cards();
+    // shuffle_cardstack(computer_stack);
+    cardstack *player_stack = split_cardstack(computer_stack);
     
-
     while (1) {
-        // Game and interaction logic        
+        card *player_top = player_stack->head;
+        printf("Your card:\n");
+        print_thinkpad(player_top->thinkpad);
+        
+        
+
+
+        // Game and interaction logic      
+        // 1. Select a parameter
+        // 2. Keep the card if yours is better, move it to the back of the stack if the other one is better
+        // 3. Repeat until one of either stacks is empty
     }
 }
 
@@ -191,7 +236,7 @@ void run_game() {
  * @author Lian Studer
  */
 void show_game_manual() {
-    printf("\n\n--- How to play ---\n\n");
+    printf("How to play\n\n");
 }
 
 /*
@@ -214,29 +259,17 @@ char start_menu() {
  * @author Lian Studer
  */
 int main() {
-    // ASCII ThinkPad Logo
-    printf("\n \
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n \
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n \
-@@@..........@...@@@@@@@////@@@@@@@@@@@...@@@@@@@.......@@@@@@@@@@@@@@@@@...@@@\n \
-@@@@@@....@@@@...@@@@@@@@@@@@@@@@@@@@@@...@@@@@@@...@@...@@@@@@@@@@@@@@@@...@@@\n \
-@@@@@@....@@@@........@@...@@........@@...@@...@@...@@...@........@@........@@@\n \
-@@@@@@....@@@@...@@...@@...@@...@@...@@...@...@@@...@@...@...@@...@@...@@...@@@\n \
-@@@@@@....@@@@...@@...@@...@@...@@...@@...@...@@@.......@@...@....@@...@@...@@@\n \
-@@@@@@....@@@@...@@...@@...@@...@@...@@...,..@@@@...,*@@@@@.......@@...@@...@@@\n \
-@@@@@@....@@@@...@@...@@...@@...@@...@@...@...@@@...@@@@@@...@@...@@...@@...@@@\n \
-@@@@@@....@@@@...@@...@@...@@...@@...@@...@...@@@...@@@@@@...@@...@@...@@...@@@\n \
-@@@@@@....@@@@...@@...@@...@@...@@...@@...@@...@@...@@@@@@...@@...@@...@@...@@@\n \
-@@@@@@....@@@@...@@...@@...@@...@@...@@...@@...@@...@@@@@@....@...@@....@...@@@\n \
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n \
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n\n");
-    printf("ThinkPad® Quartett\nBy Kris Huber & Lian Studer\n\n");
+    printf("\
+░▀█▀░█░█░▀█▀░█▀█░█░█░█▀█░█▀█░█▀▄░░░▄▀▄░█░█░█▀█░█▀▄░▀█▀░█▀▀░▀█▀░▀█▀\n\
+░░█░░█▀█░░█░░█░█░█▀▄░█▀▀░█▀█░█░█░░░█ █░█░█░█▀█░█▀▄░░█░░█▀▀░░█░░░█░\n\
+░░▀░░▀░▀░▀▀▀░▀░▀░▀░▀░▀░░░▀░▀░▀▀░░░░░▀▀░▀▀▀░▀░▀░▀░▀░░▀░░▀▀▀░░▀░░░▀░\n\n");
+    printf("By Kris Huber & Lian Studer\n");
 
     printf("\n \
 Menu\n \
 1> Start game\n \
 2> How to play\n \
-3> Quit\n");
+3> Quit\n\n");
 
     while (1) {
         char menu_option = start_menu();
@@ -250,6 +283,7 @@ Menu\n \
                 show_game_manual();
                 break;
             case '3':
+                exit(0);
                 break;
         }
     } 
