@@ -327,10 +327,14 @@ char select_menu_option() {
  * @author Lian Studer
  */
 int main() {
+    #if !defined(WIN32) && !defined(_WIN32)
     printf("\
 ░▀█▀░█░█░▀█▀░█▀█░█░█░█▀█░█▀█░█▀▄░░░▄▀▄░█░█░█▀█░█▀▄░▀█▀░█▀▀░▀█▀░▀█▀\n\
 ░░█░░█▀█░░█░░█░█░█▀▄░█▀▀░█▀█░█░█░░░█ █░█░█░█▀█░█▀▄░░█░░█▀▀░░█░░░█░\n\
 ░░▀░░▀░▀░▀▀▀░▀░▀░▀░▀░▀░░░▀░▀░▀▀░░░░░▀▀░▀▀▀░▀░▀░▀░▀░░▀░░▀▀▀░░▀░░░▀░\n\n");
+    #else
+    printf("ThinkPad® Quartett\n");
+    #endif
     printf("By Kris Huber & Lian Studer\n");
 
     printf("\n \
