@@ -252,18 +252,18 @@ void print_cardstack_info(cardstack *player_stack, cardstack *computer_stack) {
  *  @author Kris Huber
  */
 void print_win() {
-    puts("+---------+")
-    puts("| You Won |");
-    puts("+---------+")
+    puts("+-------------------+")
+    puts("| You Won The Game! |");
+    puts("+-------------------+")
 }
 
 /*
  *  @author Kris Huber
  */
 void print_loss() {
-    puts("+----------+")
-    puts("| You Lost |");
-    puts("+----------+")
+    puts("+--------------------+")
+    puts("| You Lost The Game! |");
+    puts("+--------------------+")
 }
 
 /*
@@ -334,9 +334,11 @@ void run_game() {
 
         if (player_stack->size == 0) {
             player_loose();
+            print_win();
             return;
         } else if (computer_stack-> size == 0) {
             computer_loose();
+            print_loss();
             return;
         }
     }
