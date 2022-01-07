@@ -225,9 +225,9 @@ void print_thinkpad(thinkpad *thinkpad) {
 ╻━Your card━━━━━━━━━━━━╻\n \
 ┃ Model: %s\t\t┃\n \
 ┃ ┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅ ┃\n \
-┃       RAM: %iGb\t┃\n \
-┃   Storage: %iGb\t┃\n \
-┃ CPU Clock: %.2lfGhz\t┃\n \
+┃       RAM: %iGB\t┃\n \
+┃   Storage: %iGB\t┃\n \
+┃ CPU Clock: %.2lfGHz\t┃\n \
 ╹━━━━━━━━━━━━━━━━━━━━━━╹\n",
     thinkpad->model_name,
     thinkpad->ram,
@@ -252,18 +252,18 @@ void print_cardstack_info(cardstack *player_stack, cardstack *computer_stack) {
  *  @author Kris Huber
  */
 void print_win() {
-    puts("+-------------------+")
+    puts("+-------------------+");
     puts("| You Won The Game! |");
-    puts("+-------------------+")
+    puts("+-------------------+");
 }
 
 /*
  *  @author Kris Huber
  */
 void print_loss() {
-    puts("+--------------------+")
+    puts("+--------------------+");
     puts("| You Lost The Game! |");
-    puts("+--------------------+")
+    puts("+--------------------+");
 }
 
 /*
@@ -274,9 +274,9 @@ void print_loss() {
 int play_cards(thinkpad *player_thinkpad, thinkpad *computer_thinkpad) {
     printf("\n \
 Select a parameter:\n \
-1> RAM in Gb\n \
-2> Storage in Gb\n \
-3> CPU Clock in Ghz\n \
+1> RAM in GB\n \
+2> Storage in GB\n \
+3> CPU Clock in GHz\n \
 4> Quit\n\n");
     char selected_option = select_menu_option();
     switch (selected_option) {
@@ -333,11 +333,9 @@ void run_game() {
         }
 
         if (player_stack->size == 0) {
-            player_loose();
             print_win();
             return;
         } else if (computer_stack-> size == 0) {
-            computer_loose();
             print_loss();
             return;
         }
@@ -371,15 +369,22 @@ char select_menu_option() {
  * @author Lian Studer
  */
 int main() {
-    #if !defined(WIN32) && !defined(_WIN32)
-    printf("\
-░▀█▀░█░█░▀█▀░█▀█░█░█░█▀█░█▀█░█▀▄░░░▄▀▄░█░█░█▀█░█▀▄░▀█▀░█▀▀░▀█▀░▀█▀\n\
-░░█░░█▀█░░█░░█░█░█▀▄░█▀▀░█▀█░█░█░░░█ █░█░█░█▀█░█▀▄░░█░░█▀▀░░█░░░█░\n\
-░░▀░░▀░▀░▀▀▀░▀░▀░▀░▀░▀░░░▀░▀░▀▀░░░░░▀▀░▀▀▀░▀░▀░▀░▀░░▀░░▀▀▀░░▀░░░▀░\n\n");
-    #else
-    printf("ThinkPad® Quartett\n");
-    #endif
-    printf("By Kris Huber & Lian Studer\n");
+        printf("\n \
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n \
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n \
+@@@..........@...@@@@@@@////@@@@@@@@@@@...@@@@@@@.......@@@@@@@@@@@@@@@@@...@@@\n \
+@@@@@@....@@@@...@@@@@@@@@@@@@@@@@@@@@@...@@@@@@@...@@...@@@@@@@@@@@@@@@@...@@@\n \
+@@@@@@....@@@@........@@...@@........@@...@@...@@...@@...@........@@........@@@\n \
+@@@@@@....@@@@...@@...@@...@@...@@...@@...@...@@@...@@...@...@@...@@...@@...@@@\n \
+@@@@@@....@@@@...@@...@@...@@...@@...@@...@...@@@.......@@...@....@@...@@...@@@\n \
+@@@@@@....@@@@...@@...@@...@@...@@...@@...,..@@@@...,*@@@@@.......@@...@@...@@@\n \
+@@@@@@....@@@@...@@...@@...@@...@@...@@...@...@@@...@@@@@@...@@...@@...@@...@@@\n \
+@@@@@@....@@@@...@@...@@...@@...@@...@@...@...@@@...@@@@@@...@@...@@...@@...@@@\n \
+@@@@@@....@@@@...@@...@@...@@...@@...@@...@@...@@...@@@@@@...@@...@@...@@...@@@\n \
+@@@@@@....@@@@...@@...@@...@@...@@...@@...@@...@@...@@@@@@....@...@@....@...@@@\n \
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n \
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n\n");
+    printf("ThinkPad® Quartett\nBy Kris Huber & Lian Studer\n\n");
 
     printf("\n \
 Menu\n \
