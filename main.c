@@ -46,7 +46,7 @@ void next_card(cardstack *);
 cardstack *generate_cards(void);
 void run_game(void);
 void show_game_manual(void);
-char start_menu(void);
+char select_menu_option(void);
 char select_card_parameter(void);
 void play_cards(card *, card *);
 
@@ -233,17 +233,50 @@ void run_game() {
     printf("\n\n--- Starting the game ---\n\n");
 
     cardstack *computer_stack = generate_cards();
-    // shuffle_cardstack(computer_stack);
+    shuffle_cardstack(computer_stack);
     cardstack *player_stack = split_cardstack(computer_stack);
     
     while (1) {
-        card *player_top = player_stack->head;
+        thinkpad *computer_thinkpad = computer_stack->head->thinkpad;
+        thinkpad *player_thinkpad = player_stack->head->thinkpad;
         printf("Your card:\n");
-        print_thinkpad(player_top->thinkpad);
+        print_thinkpad(player_thinkpad);
         
+        printf("\n \
+Select a parameter:\n \
+1> RAM in Gb\n \
+2> Storage in Gb\n \
+3> CPU Clock in Ghz\n \
+4> Quit\n\n");
+
+        char selected_option = select_menu_option();
+        switch (selected_option) {
+            case '1':
+                if (player_thinkpad->ram > computer_thinkpad->ram) {
+                    win();
+                } else {
+                    
+                }
+                break;
+            case '2':
+                if (player_thinkpad->storage > computer_thinkpad->storage) {
+                    win();
+                } else {
+
+                }
+                break;
+            case '3':
+                if (player_thinkpad->cpu_clock > computer_thinkpad->cpu_clock) {
+                    win();
+                } else {
+
+                }
+                break;
+            case '4':
+                exit(0);
+                break;
+        }
         
-
-
         // Game and interaction logic      
         // 1. Select a parameter
         // 2. Keep the card if yours is better, move it to the back of the stack if the other one is better
@@ -261,7 +294,7 @@ void show_game_manual() {
 /*
  * @author Lian Studer
  */
-char start_menu() {
+char select_menu_option() {
     char selected_option;
     printf("Enter your selection: ");
     scanf(" %c", &selected_option);
@@ -270,7 +303,7 @@ char start_menu() {
         return selected_option;
     }
 
-    printf("%c is not a valid menu option\n", selected_option);
+    printf("%c is not a valid option\n", selected_option);
     return 0;
 }
 
@@ -291,7 +324,7 @@ Menu\n \
 3> Quit\n\n");
 
     while (1) {
-        char menu_option = start_menu();
+        char menu_option = select_menu_option();
         switch (menu_option) {
             case '0':
                 continue;
