@@ -88,7 +88,7 @@ thinkpad *create_thinkpad(char *name, int ram, int storage, double cpu_clock) {
  * @description initialize a cardstack struct
  */
 cardstack *create_cardstack(card *first_card) {
-    nullcheck(first_card, "Thinpad Passed into LL Initializer");
+    nullcheck(first_card, "Thinkpad passed into linked list initializer");
     cardstack *l = malloc(sizeof(cardstack));
     l->tail = l->head = first_card;
     l->size = 1;
@@ -136,44 +136,44 @@ void next_card(cardstack *cs) {
 }
 
 /*
- * @author Kris Huber
- * @description shuffle all cards in cardstack
- */
-void shuffle_cardstack(cardstack *cs) {
-    srand(time(0));
-    card **csa = malloc(sizeof(card*) * cs->size);
+//  * @author Kris Huber
+//  * @description shuffle all cards in cardstack
+//  */
+// void shuffle_cardstack(cardstack *cs) {
+//     srand(time(0));
+//     card **csa = malloc(sizeof(card*) * cs->size);
 
-    puts("here");
+//     puts("");
 
-    // load cardstack into card pointer array
-    size_t i = 0;
-    for(card *cur = cs->head; cur != NULL; cur = cur->next) {
-        if(i > cs->size) break;
-        csa[i] = cur;
-        i++;
-    }
+//     // load cardstack into card pointer array
+//     size_t i = 0;
+//     for(card *cur = cs->head; cur != NULL; cur = cur->next) {
+//         if(i > cs->size) break;
+//         csa[i] = cur;
+//         i++;
+//     }
 
-    // shuffle array
-    for (int t = cs->size - 1; t > 0; t--) {
-        // Pick a random index from 0 to i
-        int j = rand() % (t + 1);
+//     // shuffle array
+//     for (int t = cs->size - 1; t > 0; t--) {
+//         // Pick a random index from 0 to i
+//         int j = rand() % (t + 1);
  
-        // Swap csa with the element at random index
-        card *temp = csa[t];
-        csa[t] = csa[j];
-        csa[j] = temp;
-    }
+//         // Swap csa with the element at random index
+//         card *temp = csa[t];
+//         csa[t] = csa[j];
+//         csa[j] = temp;
+//     }
 
-    puts("here");
+//     puts("");
 
-    // rethread
-    for(int k = 0; k < cs->size - 2; k++) {
-        if(k == 0) cs->head = csa[k];
-        csa[k]->next = csa[k + 1];
-    }
-    puts("here");
-    cs->tail = csa[cs->size - 1];
-}
+//     // rethread
+//     for(int k = 0; k < cs->size - 2; k++) {
+//         if(k == 0) cs->head = csa[k];
+//         csa[k]->next = csa[k + 1];
+//     }
+//     puts("");
+//     cs->tail = csa[cs->size - 1];
+// }
 
 /*
  * @author Lian Studer
@@ -213,7 +213,7 @@ cardstack *split_cardstack(cardstack *cs) {
  */
 void print_thinkpad(thinkpad *thinkpad) {
     printf("\n \
-╻━━━━━━━━━━━━━━━━━━━━━━╻\n \
+╻━Your card━━━━━━━━━━━━╻\n \
 ┃ Model: %s\t\t┃\n \
 ┃ ┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅ ┃\n \
 ┃       RAM: %iGb\t┃\n \
@@ -229,6 +229,19 @@ void print_thinkpad(thinkpad *thinkpad) {
 /*
  * @author Lian Studer
  */
+void print_cardstack_info(cardstack *player_stack, cardstack *computer_stack) {
+    printf("\n \
+╻━Cardstacks━━━━━━━━━━━━━━━━━━━╻\n \
+┃     Your stack size: %i\t┃\n \
+┃ Opponent stack size: %i\t┃\n \
+╹━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╹\n",
+    player_stack->size,
+    computer_stack->size);
+}
+
+/*
+ * @author Lian Studer
+ */
 void play_cards(card *player_top, card *computer_top) {
 
 }
@@ -237,16 +250,15 @@ void play_cards(card *player_top, card *computer_top) {
  * @author Lian Studer
  */
 void run_game() {
-    printf("\n\n--- Starting the game ---\n\n");
-
     cardstack *computer_stack = generate_cards();
-    shuffle_cardstack(computer_stack);
+    // shuffle_cardstack(computer_stack);
     cardstack *player_stack = split_cardstack(computer_stack);
     
     while (1) {
+        
         thinkpad *computer_thinkpad = computer_stack->head->thinkpad;
         thinkpad *player_thinkpad = player_stack->head->thinkpad;
-        printf("Your card:\n");
+        print_cardstack_info(player_stack, computer_stack);
         print_thinkpad(player_thinkpad);
         
         printf("\n \
@@ -260,21 +272,18 @@ Select a parameter:\n \
         switch (selected_option) {
             case '1':
                 if (player_thinkpad->ram > computer_thinkpad->ram) {
-                    win();
                 } else {
                     
                 }
                 break;
             case '2':
                 if (player_thinkpad->storage > computer_thinkpad->storage) {
-                    win();
                 } else {
 
                 }
                 break;
             case '3':
                 if (player_thinkpad->cpu_clock > computer_thinkpad->cpu_clock) {
-                    win();
                 } else {
 
                 }
@@ -317,7 +326,6 @@ char select_menu_option() {
 /*
  * @author Lian Studer
  */
-/*
 int main() {
     printf("\
 ░▀█▀░█░█░▀█▀░█▀█░█░█░█▀█░█▀█░█▀▄░░░▄▀▄░█░█░█▀█░█▀▄░▀█▀░█▀▀░▀█▀░▀█▀\n\
@@ -349,24 +357,5 @@ Menu\n \
     } 
 
     return 0;
-}*/
-
-int main() {
-    cardstack *cs = generate_cards();
-   
-    /*
-    for(card *c = cs->head; c != NULL; c = c->next) {
-        puts(c->thinkpad->model_name);
-    }
-    */
-    
-    shuffle_cardstack(cs);
-
-    card *p = cs->head;
-    for(int v = 1; v <= cs->size; v++) {
-        puts(p->thinkpad->model_name);
-        p = p->next;
-    }
-
-    return 0;
 }
+
