@@ -304,17 +304,20 @@ void run_game() {
             append_card(player_stack, computer_stack->head);
             remove_top_card(computer_stack);
             next_card(player_stack);
+            next_card(computer_stack);
+
         } else if (result == 1) { // computer wins
             append_card(computer_stack, player_stack->head);
             remove_top_card(player_stack);
             next_card(computer_stack);
+            next_card(player_stack);
         }
 
         if (player_stack->size == 0) {
-            player_loose();
+            // player_loose();
             return;
         } else if (computer_stack-> size == 0) {
-            computer_loose();
+            // computer_loose();
             return;
         }
     }
@@ -378,7 +381,20 @@ Menu\n \
                 exit(0);
                 break;
         }
-    } 
+    }
+
+    printf("\n \
+Would you like to play again?\n \
+y> Yes\n \
+n> No\n\n");
+    char confirm = select_menu_option();
+        switch (confirm) {
+            case 'y':
+                run_game();
+            case 'n':
+                exit(0);
+                break;
+        }
 
     return 0;
 }
