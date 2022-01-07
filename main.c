@@ -31,14 +31,16 @@ void eputs(char *);
 void nullcheck(void *, char *);
 thinkpad *create_thinkpad(char *, int, int, double);
 card *create_card(thinkpad *);
-cardstack *create_cardstack(thinkpad *);
+cardstack *create_cardstack(card *);
 card *create_card(thinkpad *);
-void append_card(cardstack *, thinkpad *);
+void append_card(cardstack *, card *);
 void shuffle_cardstack(cardstack *);
 cardstack *generate_cards(void);
 void run_game(void);
 void show_game_manual(void);
 char start_menu(void);
+cardstack *split_cardstack(cardstack *);
+void next_card(cardstack *);
 
 /*
  * @author Kris Huber
@@ -74,13 +76,13 @@ thinkpad *create_thinkpad(char *name, int ram, int storage, double cpu_clock) {
  * @author Kris Huber
  * @description initialize a cardstack struct
  */
-// cardstack *create_cardstack(thinkpad *tp) {
-//     nullcheck(tp, "Thinpad Passed into LL Initializer");
-//     cardstack *l = malloc(sizeof(cardstack));
-//     l->tail = l->head = create_node(tp);
-//     l->size = 1;
-//     return l;
-// }
+cardstack *create_cardstack(card *first_card) {
+    nullcheck(first_card, "Thinpad Passed into LL Initializer");
+    cardstack *l = malloc(sizeof(cardstack));
+    l->tail = l->head = first_card;
+    l->size = 1;
+    return l;
+}
 
 /*
  * @author Kris Huber
@@ -97,9 +99,25 @@ card *create_card(thinkpad *tp) {
  * @author Kris Huber
  * @description append a card to the cardstack instance
  */
-void append_card(cardstack *cs, thinkpad *tp) {
-    cs->tail = cs->tail->next = create_card(tp);
+void append_card(cardstack *cs, card *new_card) {
+    cs->tail = cs->tail->next = new_card;
+    cs->tail->next = cs->head;
     cs->size++;
+}
+
+void remove_top_card(cardstack *cardstack) {
+    cardstack->head = cardstack->head->next;
+    cardstack->tail->next = cardstack->head;
+    cardstack->size--;
+}
+
+/*
+ * @author Lian Studer
+ * @description append a card to the cardstack instance
+ */
+void next_card(cardstack *cs) {
+    cs->tail = cs->head;
+    cs->head = cs->head->next;
 }
 
 /*
@@ -127,15 +145,42 @@ cardstack *generate_cards() {
     return cs;
 }
 
+cardstack *split_cardstack(cardstack *cs) {
+    int first_stack_size = (int)(cs->size / 2);
+    int sec_stack_size = (cs->size) - first_stack_size;
+
+    printf("Stack Size 1: %i\n", first_stack_size);
+    printf("Stack Size 2: %i\n", sec_stack_size);
+
+    cardstack *new_cardstack = create_cardstack(cs->head);
+    nullcheck(new_cardstack, "The second cardstack");
+
+    remove_top_card(cs);
+    next_card(cs);
+
+
+    for (int i = 1; i < first_stack_size; i++) {
+        append_card(new_cardstack, cs->head);
+        remove_top_card(cs);
+        next_card(cs);
+    }
+
+    return new_cardstack;
+}
+
 /*
  * @author Lian Studer
  */
 void run_game() {
     printf("\n\n--- Starting the game ---\n\n");
 
-    // cardstack *initial_cardstack = generate_cards();
+    cardstack *initial_cardstack = generate_cards();
+    printf("Cardstack Size: %i\n", initial_cardstack->size);
     // shuffle_cardstack(initial_cardstack);
-    // cardstack *second_cardstack = split_cardstack(initial_cardstack);
+    cardstack *second_cardstack = split_cardstack(initial_cardstack);
+    printf("Cardstack Size 1: %i\n", initial_cardstack->size);
+    printf("Cardstack Size 2: %i\n", second_cardstack->size);
+    
 
     while (1) {
         // Game and interaction logic        
