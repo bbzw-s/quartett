@@ -324,6 +324,7 @@ void run_game() {
             append_card(player_stack, computer_stack->head);
             remove_top_card(computer_stack);
             next_card(player_stack);
+
             puts("You won this round!");
         } else if (result == 1) { // computer wins
             append_card(computer_stack, player_stack->head);
@@ -407,7 +408,20 @@ Menu\n \
                 exit(0);
                 break;
         }
-    } 
+    }
+
+    printf("\n \
+Would you like to play again?\n \
+y> Yes\n \
+n> No\n\n");
+    char confirm = select_menu_option();
+        switch (confirm) {
+            case 'y':
+                run_game();
+            case 'n':
+                exit(0);
+                break;
+        }
 
     return 0;
 }
