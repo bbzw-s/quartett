@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <ctype.h>
+#include <time.h>
 
 /*
  * Type Definitions
@@ -126,32 +127,38 @@ void next_card(cardstack *cs) {
  */
 void shuffle_cardstack(cardstack *cs) {
     srand(time(0));
-    card *csa[cs->size];
+    card **csa = malloc(sizeof(card*) * cs->size);
+
+    puts("here");
 
     // load cardstack into card pointer array
     size_t i = 0;
     for(card *cur = cs->head; cur != NULL; cur = cur->next) {
+        if(i > cs->size) break;
         csa[i] = cur;
         i++;
     }
 
     // shuffle array
-    for (int t = cardstack->size - 1; t > 0; t--) {
+    for (int t = cs->size - 1; t > 0; t--) {
         // Pick a random index from 0 to i
         int j = rand() % (t + 1);
  
         // Swap csa with the element at random index
-        card temp = csa[t];
+        card *temp = csa[t];
         csa[t] = csa[j];
         csa[j] = temp;
     }
 
+    puts("here");
+
     // rethread
-    for(int k = 0; k < cardstack->size - 2; k++) {
-        if(k == 0) cs->head = csa[k]:
+    for(int k = 0; k < cs->size - 2; k++) {
+        if(k == 0) cs->head = csa[k];
         csa[k]->next = csa[k + 1];
     }
-    cs->tail = csa[cardstack->size - 1];
+    puts("here");
+    cs->tail = csa[cs->size - 1];
 }
 
 /*
@@ -232,6 +239,7 @@ char start_menu() {
 /*
  * @author Lian Studer
  */
+/*
 int main() {
     // ASCII ThinkPad Logo
     printf("\n \
@@ -272,6 +280,26 @@ Menu\n \
                 break;
         }
     } 
+
+    return 0;
+}*/
+
+int main() {
+    cardstack *cs = generate_cards();
+   
+    /*
+    for(card *c = cs->head; c != NULL; c = c->next) {
+        puts(c->thinkpad->model_name);
+    }
+    */
+    
+    shuffle_cardstack(cs);
+
+    card *p = cs->head;
+    for(int v = 1; v <= cs->size; v++) {
+        puts(p->thinkpad->model_name);
+        p = p->next;
+    }
 
     return 0;
 }
