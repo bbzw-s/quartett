@@ -32,7 +32,7 @@ typedef struct {
 // Utility functions
 void eputs(char *);
 void nullcheck(void *, char *);
-void print_thinkpad(thinkpad *);
+void print_thinkpad(cardstack *);
 
 // Linked list abstractions
 thinkpad *create_thinkpad(char *, int, int, double);
@@ -220,15 +220,16 @@ cardstack *split_cardstack(cardstack *cs) {
 /*
  * @author Lian Studer
  */
-void print_thinkpad(thinkpad *thinkpad) {
+void print_thinkpad(cardstack *cardstack) {
+    thinkpad *thinkpad = cardstack->head->thinkpad;
     printf("\n \
-╻━Your card━━━━━━━━━━━━╻\n \
-┃ Model: %s\t\t┃\n \
-┃ ┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅ ┃\n \
-┃       RAM: %iGB\t┃\n \
-┃   Storage: %iGB\t┃\n \
-┃ CPU Clock: %.2lfGHz\t┃\n \
-╹━━━━━━━━━━━━━━━━━━━━━━╹\n",
++-Your card------------+\n \
+| Model: %s\t\t|\n \
+| -------------------- |\n \
+|       RAM: %iGB\t|\n \
+|   Storage: %iGB\t|\n \
+| CPU Clock: %.2lfGHz\t|\n \
++----------------------+\n",
     thinkpad->model_name,
     thinkpad->ram,
     thinkpad->storage,
@@ -240,10 +241,10 @@ void print_thinkpad(thinkpad *thinkpad) {
  */
 void print_cardstack_info(cardstack *player_stack, cardstack *computer_stack) {
     printf("\n \
-╻━Cardstacks━━━━━━━━━━━━━━━━━━━╻\n \
-┃     Your stack size: %i\t┃\n \
-┃ Opponent stack size: %i\t┃\n \
-╹━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╹\n",
++-Cardstacks-------------------+\n \
+|     Your stack size: %i\t|\n \
+| Opponent stack size: %i\t|\n \
++------------------------------+\n",
     player_stack->size,
     computer_stack->size);
 }
@@ -317,7 +318,7 @@ void run_game() {
         thinkpad *player_thinkpad = player_stack->head->thinkpad;
         
         print_cardstack_info(player_stack, computer_stack);
-        print_thinkpad(player_thinkpad);
+        print_thinkpad(player_stack);
         
         int result = play_cards(player_thinkpad, computer_thinkpad);
         if (result == 0) { // player wins
@@ -334,10 +335,10 @@ void run_game() {
         }
 
         if (player_stack->size == 0) {
-            print_win();
+            print_loss();
             return;
         } else if (computer_stack-> size == 0) {
-            print_loss();
+            print_win();
             return;
         }
     }
